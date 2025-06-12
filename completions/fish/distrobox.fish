@@ -1,22 +1,17 @@
-# get available containers
-function __fish_distrobox_complete_containers
-  distrobox list | sed 1d | awk -F'|' '{print $2}' | sed 's/^[ \t]*//;s/[ \t]*$//'
-end
-
 # get available images
 function __fish_distrobox_complete_images
   distrobox create -C | sed 1d
 end
 
-# global options
-complete -c distrobox -s h -l help -d "show help"
-complete -c distrobox -s v -l verbose -d "show more verbosity"
-complete -c distrobox -s V -l version -d "show version"
-
 # read subcommands into variable
 set -l subcommands assemble create enter list ls rm stop upgrade ephemeral generate-entry version help
 
 complete -c distrobox -f
+
+# global options
+complete -c distrobox -s h -l help -d "show help"
+complete -c distrobox -s v -l verbose -d "show more verbosity"
+complete -c distrobox -s V -l version -d "show version"
 
 # assemble
 complete -c distrobox -n "not __fish_seen_subcommand_from $subcommands" -a assemble \

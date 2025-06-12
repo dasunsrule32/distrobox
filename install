@@ -82,6 +82,7 @@ icon_dest_path="${prefix}/share/icons/hicolor"
 completion_bash_dest_path="${prefix}/share/bash-completion/completions/"
 completion_zsh_dest_path="${prefix}/share/zsh/site-functions/"
 completion_fish_dest_path="${prefix}/share/fish/vendor_completions.d/"
+function_fish_dest_path="${prefix}/share/fish/vendor_functions.d/"
 
 set -o errexit
 set -o nounset
@@ -98,7 +99,8 @@ cd "${curr_dir}" || exit 1
 # else download targz and uncompress it
 if [ -e "${curr_dir}/distrobox-enter" ]; then
 	if ! install -d "${dest_path}" "${man_dest_path}" "${completion_bash_dest_path}" \
-		"${completion_zsh_dest_path}" "${completion_fish_dest_path}" "${icon_dest_path}/scalable/apps"; then
+		"${completion_zsh_dest_path}" "${completion_fish_dest_path}" "${function_fish_dest_path}" \
+		"${icon_dest_path}/scalable/apps"; then
 		printf >&2 "Do you have permission to write to %s?\n" "${prefix}"
 		exit 1
 	fi
@@ -126,6 +128,11 @@ if [ -e "${curr_dir}/distrobox-enter" ]; then
 	if [ -e "completions" ]; then
 		for file in completions/fish/*; do
 			install -m 0644 "${file}" "${completion_fish_dest_path}"
+		done
+	fi
+	if [ -e "functions" ]; then
+		for file in functions/fish/*; do
+			install -m 0644 "${file}" "${function_fish_dest_path}"
 		done
 	fi
 	if [ -e icons/terminal-distrobox-icon.svg ]; then
@@ -175,7 +182,8 @@ else
 	fi
 	# deploy our files
 	if ! install -d "${dest_path}" "${man_dest_path}" "${completion_bash_dest_path}" \
-		"${completion_zsh_dest_path}" "${completion_fish_dest_path}" "${icon_dest_path}/scalable/apps"; then
+		"${completion_zsh_dest_path}" "${completion_fish_dest_path}" "${function_fish_dest_path}" \
+		"${icon_dest_path}/scalable/apps"; then
 		printf >&2 "Do you have permission to write to %s?\n" "${prefix}"
 		exit 1
 	fi
@@ -203,6 +211,11 @@ else
 	if [ -e "distrobox-$(echo "${release_name}" | sed 's/.tar.gz//g')/completions/fish/" ]; then
 		for file in "distrobox-$(echo "${release_name}" | sed 's/.tar.gz//g')"/completions/fish/*; do
 			install -m 0644 "${file}" "${completion_fish_dest_path}"
+		done
+	fi
+	if [ -e "distrobox-$(echo "${release_name}" | sed 's/.tar.gz//g')/functions/fish/" ]; then
+		for file in "distrobox-$(echo "${release_name}" | sed 's/.tar.gz//g')"/functions/fish/*; do
+			install -m 0644 "${file}" "${function_fish_dest_path}"
 		done
 	fi
 	if [ -e "distrobox-$(echo "${release_name}" | sed 's/.tar.gz//g')"/icons/terminal-distrobox-icon.svg ]; then
