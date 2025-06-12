@@ -1,6 +1,3 @@
-# read subcommand into variable
-set -l subcommand create rm
-
 complete -c distrobox-assemble -f
 
 # global options
